@@ -3,10 +3,13 @@ import Head from "next/head";
 import desktop02 from '../../../public/images/desktop-pagina-2.png';
 import Image from "next/image";
 import Button from "../../components/Button";
+import Accordion from "../../components/Accordion";
 import Router from "next/router";
 import firebase from "../../services/firebaseConnection";
 
 export default function Attendance() {
+
+    const [isActive, setIsActive] = useState(false);
 
     return (
 
@@ -15,7 +18,7 @@ export default function Attendance() {
                 <title>Consig Facil</title>
             </Head>
 
-            <div className="container mt-4 p-4">
+            <div className="container mt-4 mb-4 p-4">
                 <div className="row align-items-center">
                     <div className="col-md-7">
 
@@ -55,8 +58,8 @@ export default function Attendance() {
                                 <div className="breadcrumb mb-3 shadow p-3 bg-body rounded">
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
-                                            <input className="form-check-input check-pgto ms-4" type="checkbox" />
-                                                <label className="form-check-label ms-4">
+                                            <input className="form-check-input check-pgto ms-4" type="checkbox" id="checkPix" />
+                                                <label htmlFor="checkPix" className="form-check-label ms-4">
                                                     Pix
                                                 </label>
                                         </div>
@@ -65,8 +68,8 @@ export default function Attendance() {
                                 <div className="breadcrumb mb-3 shadow p-3 bg-body rounded">
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
-                                            <input className="form-check-input check-pgto ms-4" type="checkbox" />
-                                                <label className="form-check-label ms-4">
+                                            <input className="form-check-input check-pgto ms-4" type="checkbox" id="checkCash" />
+                                                <label htmlFor="checkCash" className="form-check-label ms-4">
                                                     Em dinheiro
                                                 </label>
                                         </div>
@@ -76,10 +79,7 @@ export default function Attendance() {
                                 <div className="breadcrumb mb-3 shadow p-3 bg-body rounded">
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
-                                            <input className="form-check-input check-pgto ms-4" type="checkbox" />
-                                                <label className="form-check-label ms-4">
-                                                    Cartão de Crédito
-                                                </label>
+                                            <Accordion active={isActive} />
                                         </div>
                                     </div>
                                 </div>
