@@ -9,8 +9,6 @@ import firebase from "../../services/firebaseConnection";
 
 export default function Attendance() {
 
-    const [isActive, setIsActive] = useState(false);
-
     return (
 
         <>
@@ -79,7 +77,7 @@ export default function Attendance() {
                                 <div className="breadcrumb mb-3 shadow p-3 bg-body rounded">
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
-                                            <Accordion active={isActive} />
+                                            <Accordion />
                                         </div>
                                     </div>
                                 </div>
