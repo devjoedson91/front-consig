@@ -6,8 +6,53 @@ import Button from "../../components/Button";
 import Accordion from "../../components/Accordion";
 import Router from "next/router";
 import firebase from "../../services/firebaseConnection";
+import styles from './styles.module.scss';
+
+type ProfessionProps = {
+    id: number | string;
+    nome: string;
+}
 
 export default function Attendance() {
+
+    const [especialidades, setEspecialidades] = useState<ProfessionProps[]>([]);
+    const [valueConsulta, setValueConsulta] = useState('');
+
+    useEffect(() => {
+
+        async function getEspecialidades() {
+
+            await firebase.database().ref('especialidades').on('value', (snapshot) => {
+
+                setEspecialidades(snapshot.val());
+
+            })
+
+        }
+
+        getEspecialidades();
+
+    }, []);
+
+    function maskValue(value: string) {
+
+        let elementValue = value.replace(/\D/g, '');
+
+        if (elementValue.length > 4) {
+            elementValue = elementValue.replace(/(\d{3})(\d)/, '$1,$2');            
+        } else if (elementValue.length < 5) {
+            elementValue = elementValue.replace(/(\d{2})(\d)/, '$1,$2');
+        }
+
+        return elementValue;
+            
+    }
+
+    async function handleRegister(event: FormEvent) {
+
+        event.preventDefault();
+
+    }
 
     return (
 
@@ -24,7 +69,7 @@ export default function Attendance() {
 
                         <h5 className="mb-4 fw-bold">Detalhes do atendimento</h5>
 
-                        <form className="row needs-validation" noValidate>
+                        <form onSubmit={handleRegister} className="row needs-validation" noValidate>
 
                             <div className="mb-3">
                                 <label className="form-label">Especialidade principal*</label>
@@ -33,6 +78,13 @@ export default function Attendance() {
                                     required
                                 >
                                     <option value="">Selecione</option>
+                                    {
+                                        especialidades.map(item => {
+                                            return (
+                                                <option key={item.id}>{item.nome}</option>
+                                            );
+                                        })
+                                    }
                                 </select>
                                 <div className="invalid-feedback">
                                     Error message
@@ -42,8 +94,16 @@ export default function Attendance() {
                             <div className="mb-3">
                                 <label className="form-label">Informe o preço da consulta*</label>
                                 <div className="input-group flex-nowrap">
-                                    <span className="input-group-text bg-main">R$</span>
-                                    <input type="text" className="form-control" size={6} placeholder="Valor" required />
+                                    <span className={`${styles.bgMain} input-group-text`}>R$</span>
+                                    <input 
+                                        type="text" 
+                                        className="form-control" 
+                                        maxLength={6}
+                                        placeholder="Valor" 
+                                        value={valueConsulta}
+                                        required 
+                                        onChange={(e) => setValueConsulta(maskValue(e.target.value))}
+                                    />
                                 </div>
                                 <div className="invalid-feedback">
                                     Error message

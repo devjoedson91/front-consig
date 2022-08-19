@@ -31,7 +31,6 @@ export default function Home() {
 
         async function getUf() {
 
-            // o metodo on esta monitorando o banco para pegar toda atualização que ele receber
             await firebase.database().ref('estados').on('value', (snapshot) => {
 
                 setListUf(snapshot.val());
@@ -71,10 +70,20 @@ export default function Home() {
 
     async function handleRegister(event: FormEvent) {
 
-        event.preventDefault();
+        const form = document.querySelector('.needs-validation');
 
-        Router.push('/attendance');
+        if (!event.target.checkValidity()) {
 
+            event.preventDefault();
+            event.stopPropagation();
+            form.classList.add('was-validated');
+            
+        } else {
+
+            console.log('entrou aqui');
+            Router.push('/attendance');   
+
+        }
 
     }
 
