@@ -1,15 +1,6 @@
 import React, { useState } from "react";
 import styles from './styles.module.scss';
 
-// type AccordionProps = {
-
-//     active: boolean;
-
-//{ active }: AccordionProps
-
-// }
-
-
 export default function Accordion() {
 
 
