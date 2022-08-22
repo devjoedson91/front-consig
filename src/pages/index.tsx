@@ -131,7 +131,7 @@ export default function Home() {
 
                         <h2 className="mb-4">Sobre o profissional</h2>
 
-                        <h5 className="mb-4 fw-bold">Dados do profissional</h5>
+                        <h5 className="mb-4 fw-semibold">Dados do profissional</h5>
 
                         <form onSubmit={handleRegister} className="row needs-validation" noValidate>
 

@@ -67,7 +67,7 @@ export default function Attendance() {
 
                         <h2 className="mb-4">Sobre o profissional</h2>
 
-                        <h5 className="mb-4 fw-bold">Detalhes do atendimento</h5>
+                        <h5 className="mb-4 fw-semibold">Detalhes do atendimento</h5>
 
                         <form onSubmit={handleRegister} className="row needs-validation" noValidate>
 
