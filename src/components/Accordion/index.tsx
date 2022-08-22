@@ -3,32 +3,15 @@ import styles from './styles.module.scss';
 
 export default function Accordion() {
 
-    const [isChecked, setIsChecked] = useState(false);
+    const [isCheckedOne, setIsCheckedOne] = useState(false);
+    const [isCheckedTwo, setIsCheckedTwo] = useState(false);
+    const [isCheckedThree, setIsCheckedThree] = useState(false);
 
     function handleClickAccordion(event) {
 
         const accordionId = event.target.dataset.accordionHeader;
         const accordionItemOpened = document.querySelector(`[data-accordion-body="${accordionId}"]`);
         accordionItemOpened.classList.toggle(`${styles.active}`);
-
-    }
-
-    function handleOnChangeItem(event) {
-
-        const accordionItemSelected = document.querySelectorAll('.check-input-item');
-
-        console.log(event.target.hasAttribute('checked'));
-
-        for (let i = 0; i < accordionItemSelected.length; i++) {           
-
-            if (accordionItemSelected[i] !== event.target) {
-
-                accordionItemSelected[i].checked = false;
-                console.log(event.target);
-
-            }
-
-        }
 
     }
 
@@ -49,7 +32,7 @@ export default function Accordion() {
                     </label>
                 </div>
                 <div data-accordion-body="1" className={styles.accordionItem}>
-                    <div className="accordion-body" onClick={(e) => handleOnChangeItem(e)}>
+                    <div className="accordion-body">
                         <div className="form-check mb-3">
                             <label className="form-check-label ms-6" htmlFor="defaultCheck1">
                                 Parcelamento em
@@ -61,6 +44,12 @@ export default function Accordion() {
                                 type="checkbox" 
                                 value="1x" 
                                 id="1x"
+                                checked={isCheckedOne}
+                                onChange={(e) => {
+                                    setIsCheckedOne(!isCheckedOne)
+                                    setIsCheckedTwo(false);
+                                    setIsCheckedThree(false);
+                                }}
                                                                 
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="1x">
@@ -73,7 +62,12 @@ export default function Accordion() {
                                 type="checkbox" 
                                 value="2x" 
                                 id="2x"
-                                                               
+                                checked={isCheckedTwo}
+                                onChange={(e) => {
+                                    setIsCheckedOne(false)
+                                    setIsCheckedTwo(!isCheckedTwo);
+                                    setIsCheckedThree(false);
+                                }}                        
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="2x">
                                 2x sem juros
@@ -84,7 +78,13 @@ export default function Accordion() {
                                 className="form-check-input check-input-item ms-6" 
                                 type="checkbox" 
                                 value="3x" 
-                                id="3x"                              
+                                id="3x" 
+                                checked={isCheckedThree}
+                                onChange={(e) => {
+                                    setIsCheckedOne(false)
+                                    setIsCheckedTwo(false);
+                                    setIsCheckedThree(!isCheckedThree);
+                                }}                            
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="3x">
                                 3x sem juros
