@@ -3,6 +3,7 @@ import styles from './styles.module.scss';
 
 export default function Accordion() {
 
+    const [isChecked, setIsChecked] = useState(false);
 
     function handleClickAccordion(event) {
 
@@ -12,16 +13,22 @@ export default function Accordion() {
 
     }
 
-    function handleClickItem(event) {
+    function handleOnChangeItem(event) {
 
         const accordionItemSelected = document.querySelectorAll('.check-input-item');
 
-        for (let i = 0; i < accordionItemSelected.length; i++) {
+        console.log(event.target.hasAttribute('checked'));
 
-            accordionItemSelected[i].checked = accordionItemSelected[i] === event.target;
-                                    
+        for (let i = 0; i < accordionItemSelected.length; i++) {           
+
+            if (accordionItemSelected[i] !== event.target) {
+
+                accordionItemSelected[i].checked = false;
+                console.log(event.target);
+
+            }
+
         }
-        
 
     }
 
@@ -42,7 +49,7 @@ export default function Accordion() {
                     </label>
                 </div>
                 <div data-accordion-body="1" className={styles.accordionItem}>
-                    <div className="accordion-body" onClick={(e) => handleClickItem(e)}>
+                    <div className="accordion-body" onClick={(e) => handleOnChangeItem(e)}>
                         <div className="form-check mb-3">
                             <label className="form-check-label ms-6" htmlFor="defaultCheck1">
                                 Parcelamento em
