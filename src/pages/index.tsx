@@ -72,7 +72,7 @@ export default function Home() {
 
         const form = document.querySelector('.needs-validation');
 
-        if (!event.target.checkValidity()) {
+        if (!event.target) {
 
             event.preventDefault();
             event.stopPropagation();
