@@ -5,6 +5,7 @@ import Image from "next/image";
 import Button from "../components/Button";
 import Router from "next/router";
 import firebase from "../services/firebaseConnection";
+import Link from "next/link";
 
 type stateProps = {
 
@@ -68,11 +69,14 @@ export default function Home() {
     }, [uf]);
 
 
-    async function handleRegister(event: FormEvent) {
+    async function handleRegister(event: FormEvent<HTMLFormElement>) {
+
+        event.preventDefault();
+        console.log((event.currentTarget.elements.namedItem('nome') as HTMLInputElement).value);
 
         const form = document.querySelector('.needs-validation');
 
-        if (!event.target) {
+        if (!event.currentTarget.checkValidity()) {
 
             event.preventDefault();
             event.stopPropagation();
@@ -80,8 +84,8 @@ export default function Home() {
             
         } else {
 
+            event.preventDefault();
             console.log('entrou aqui');
-            Router.push('/attendance');   
 
         }
 
@@ -245,7 +249,7 @@ export default function Home() {
                                     </div>
                                 </div>
                             </div>
-
+                            
                             <Button type="submit">PROXIMO</Button>
 
                         </form>
