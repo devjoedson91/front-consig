@@ -23,11 +23,12 @@ export default function Home() {
 
     const [listUf, setListUf] = useState<stateProps[]>([]);
     const [listCity, setListCity] = useState<cityProps[]>([]);
+    const [nome, setNome] = useState('');
     const [city, setCity] = useState('');
     const [uf, setUf] = useState('');
     const [cpf, setCpf] = useState('');
     const [phone, setPhone] = useState('');
-
+    
     useEffect(() => {
 
         async function getUf() {
@@ -84,8 +85,12 @@ export default function Home() {
             
         } else {
 
-            event.preventDefault();
-            console.log('entrou aqui');
+            const data = {nome, cpf, phone, uf, city};
+
+            sessionStorage.setItem('consig@register', JSON.stringify(data));
+
+            Router.push('/attendance');
+            
 
         }
 
@@ -148,6 +153,8 @@ export default function Home() {
                                     placeholder="Digite o nome completo"
                                     minLength={3}
                                     maxLength={48}
+                                    value={nome}
+                                    onChange={(e) => setNome(e.target.value)}
                                     required
                                 />
                                 <div className="invalid-feedback">
