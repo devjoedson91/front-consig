@@ -72,9 +72,6 @@ export default function Home() {
 
     async function handleRegister(event: FormEvent<HTMLFormElement>) {
 
-        event.preventDefault();
-        console.log((event.currentTarget.elements.namedItem('nome') as HTMLInputElement).value);
-
         const form = document.querySelector('.needs-validation');
 
         if (!event.currentTarget.checkValidity()) {
@@ -87,7 +84,7 @@ export default function Home() {
 
             const data = {nome, cpf, phone, uf, city};
 
-            sessionStorage.setItem('consig@register', JSON.stringify(data));
+            localStorage.setItem('consig@register', JSON.stringify(data));
 
             Router.push('/attendance');
             

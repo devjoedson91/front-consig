@@ -15,7 +15,8 @@ type ProfessionProps = {
 
 export default function Attendance() {
 
-    const [especialidades, setEspecialidades] = useState<ProfessionProps[]>([]);
+    const [listEspecialidades, setListEspecialidades] = useState<ProfessionProps[]>([]);
+    const [especialidade, setEspecialidade] = useState('');
     const [valueConsulta, setValueConsulta] = useState('');
 
     useEffect(() => {
@@ -24,7 +25,7 @@ export default function Attendance() {
 
             await firebase.database().ref('especialidades').on('value', (snapshot) => {
 
-                setEspecialidades(snapshot.val());
+                setListEspecialidades(snapshot.val());
 
             })
 
@@ -48,9 +49,34 @@ export default function Attendance() {
             
     }
 
-    async function handleRegister(event: FormEvent) {
+    async function handleRegister(event: FormEvent<HTMLFormElement>) {
 
-        event.preventDefault();
+        const form = document.querySelector('.needs-validation');
+
+        if (!event.currentTarget.checkValidity()) {
+
+            event.preventDefault();
+            event.stopPropagation();
+            form.classList.add('was-validated');
+            
+        } else {
+
+            event.preventDefault();
+
+            if (localStorage.getItem('consig@register')) {
+
+                let dataEdit = JSON.parse(localStorage.getItem('consig@register'));
+
+                localStorage.setItem('consig@register', JSON.stringify(
+                    Object.assign(dataEdit, {
+                        especialidade,
+                        valueConsulta
+                    })
+                ))
+
+            }            
+
+        }
 
     }
 
@@ -75,11 +101,12 @@ export default function Attendance() {
                                 <label className="form-label">Especialidade principal*</label>
                                 <select
                                     className="form-select"
+                                    onChange={(e) => setEspecialidade(e.target.value)}
                                     required
                                 >
                                     <option value="">Selecione</option>
                                     {
-                                        especialidades.map(item => {
+                                        listEspecialidades.map(item => {
                                             return (
                                                 <option key={item.id}>{item.nome}</option>
                                             );
