@@ -248,8 +248,8 @@ export default function Home() {
                             <div className="row justify-content-center">
                                 <div className="col-9">
                                     <h6 className="num-pagina-progress">1 de 2</h6>
-                                    <div className="progress mb-3" style={{ height: 25 }}>
-                                        <div className="progress-bar" role="progressbar" style={{ width: 33 }} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}></div>
+                                    <div className="progress mb-3" style={{ height: 20}}>
+                                        <div className="progress-bar" role="progressbar" style={{ width: '33.33%', backgroundColor: '#483698'}} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}></div>
                                     </div>
                                 </div>
                             </div>

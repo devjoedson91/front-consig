@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import styles from './styles.module.scss';
 
-export default function Accordion() {
+type AccordionProps = {
+    onChange: () => void;
+}
+
+export default function Accordion({onChange}: AccordionProps) {
 
     const [isCheckedOne, setIsCheckedOne] = useState(false);
     const [isCheckedTwo, setIsCheckedTwo] = useState(false);
     const [isCheckedThree, setIsCheckedThree] = useState(false);
+    const [checkCard, setCheckCard] = useState(false);
 
     function handleClickAccordion(event) {
 
@@ -26,6 +31,11 @@ export default function Accordion() {
                         id="checkCard"
                         data-accordion-header="1"
                         onClick={(e) => handleClickAccordion(e)}
+                        checked={checkCard}
+                        onChange={() => {
+                            setCheckCard(!checkCard);
+                            onChange();
+                        }}
                     />
                     <label htmlFor="checkCard" className="form-check-label ms-4" data-accordion-header="1">
                         Cartão de Crédito
@@ -45,7 +55,7 @@ export default function Accordion() {
                                 value="1x" 
                                 id="1x"
                                 checked={isCheckedOne}
-                                onChange={(e) => {
+                                onChange={() => {
                                     setIsCheckedOne(!isCheckedOne)
                                     setIsCheckedTwo(false);
                                     setIsCheckedThree(false);

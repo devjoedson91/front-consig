@@ -18,6 +18,9 @@ export default function Attendance() {
     const [listEspecialidades, setListEspecialidades] = useState<ProfessionProps[]>([]);
     const [especialidade, setEspecialidade] = useState('');
     const [valueConsulta, setValueConsulta] = useState('');
+    const [checkPix, setCheckPix] = useState(false);
+    const [checkCash, setCheckCash] = useState(false);
+    const [checkCard, setCheckCard] = useState(false);
 
     useEffect(() => {
 
@@ -78,6 +81,11 @@ export default function Attendance() {
 
         }
 
+    }
+
+    function changeItens() {
+        setCheckCash(false);
+        setCheckPix(false);
     }
 
     return (
@@ -143,7 +151,16 @@ export default function Attendance() {
                                 <div className="breadcrumb mb-3 shadow p-3 bg-body rounded">
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
-                                            <input className="form-check-input check-pgto ms-4" type="checkbox" id="checkPix" />
+                                            <input 
+                                                className="form-check-input check-pgto ms-4" type="checkbox" 
+                                                id="checkPix" 
+                                                value="Pix"
+                                                checked={checkPix}
+                                                onChange={() => {
+                                                    setCheckPix(!checkPix);
+                                                    setCheckCard(false);
+                                                }}
+                                            />
                                                 <label htmlFor="checkPix" className="form-check-label ms-4">
                                                     Pix
                                                 </label>
@@ -153,7 +170,16 @@ export default function Attendance() {
                                 <div className="breadcrumb mb-3 shadow p-3 bg-body rounded">
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
-                                            <input className="form-check-input check-pgto ms-4" type="checkbox" id="checkCash" />
+                                            <input 
+                                                className="form-check-input check-pgto ms-4" type="checkbox" 
+                                                id="checkCash" 
+                                                value="Dinheiro"
+                                                checked={checkCash}
+                                                onChange={() => {
+                                                    setCheckCash(!checkCash);
+                                                    setCheckCard(false);
+                                                }}
+                                            />
                                                 <label htmlFor="checkCash" className="form-check-label ms-4">
                                                     Em dinheiro
                                                 </label>
@@ -164,7 +190,9 @@ export default function Attendance() {
                                 <div className="breadcrumb mb-3 shadow p-3 bg-body rounded">
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
-                                            <Accordion />
+                                            <Accordion 
+                                                onChange={changeItens}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -174,9 +202,9 @@ export default function Attendance() {
 
                             <div className="row justify-content-center">
                                 <div className="col-9">
-                                    <h6 className="num-pagina-progress">1 de 2</h6>
-                                    <div className="progress mb-3" style={{ height: 25 }}>
-                                        <div className="progress-bar" role="progressbar" style={{ width: 33 }} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}></div>
+                                    <h6 className="num-pagina-progress">2 de 2</h6>
+                                    <div className="progress mb-3" style={{ height: 20 }}>
+                                        <div className="progress-bar" role="progressbar" style={{ width: '66.66%', backgroundColor: '#483698' }} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}></div>
                                     </div>
                                 </div>
                             </div>
