@@ -5,7 +5,6 @@ import Image from "next/image";
 import Button from "../components/Button";
 import Router from "next/router";
 import firebase from "../services/firebaseConnection";
-import Link from "next/link";
 
 type stateProps = {
 
@@ -86,6 +85,7 @@ export default function Home() {
 
             localStorage.setItem('consig@register', JSON.stringify(data));
 
+            event.preventDefault();
             Router.push('/attendance');
             
 

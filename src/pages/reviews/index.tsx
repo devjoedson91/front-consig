@@ -1,11 +1,36 @@
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import desktop03 from '../../../public/images/desktop-pagina-3.png';
 import Button from "../../components/Button";
 import Image from "next/image";
 import Link from "next/link";
-import styles from './styles.module.scss';
 
 export default function Reviews() {
+
+    useEffect(() => {
+
+        if (localStorage.getItem('consig@register')) {
+
+            const listData = JSON.parse(localStorage.getItem('consig@register'));
+            setNome(listData.nome);
+            setCpf(listData.cpf);
+            setPhone(listData.phone);
+            setUf(listData.uf);
+            setCity(listData.city);
+            setEspecialidade(listData.especialidade);
+            setValueConsulta(listData.valueConsulta);
+
+        }
+
+    }, []);
+
+    const [nome, setNome] = useState('');
+    const [cpf, setCpf] = useState('');
+    const [phone, setPhone] = useState('');
+    const [uf, setUf] = useState('');
+    const [city, setCity] = useState('');
+    const [especialidade, setEspecialidade] = useState('');
+    const [valueConsulta, setValueConsulta] = useState('');
 
     return (
 
@@ -22,37 +47,37 @@ export default function Reviews() {
                         <div className="row mb-3">
 
                             <label htmlFor="nome" className="fw-bold">Nome completo</label>
-                            <div className="fs-6" >Nome</div>
+                            <div className="fs-6" >{nome}</div>
 
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">CPF</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6" >543.933.334-55</div>
+                                <div className="fs-6" >{cpf}</div>
                             </div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Numero de celular ou telefone</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6" >(88) 94434-5535</div>
+                                <div className="fs-6" >{phone}</div>
                             </div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Estado/Cidade</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6" >São Paulo - São Paulo</div>
+                                <div className="fs-6" >{`${uf} - ${city}`}</div>
                             </div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Especialidade principal</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6" >Fonoaudiólogo</div>
+                                <div className="fs-6" >{especialidade}</div>
                             </div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Preço da consulta</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6" >R$ 200,00</div>
+                                <div className="fs-6" >{valueConsulta}</div>
                             </div>
                         </div>
                         <div className="mb-3">

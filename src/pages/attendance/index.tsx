@@ -7,6 +7,7 @@ import Accordion from "../../components/Accordion";
 import Router from "next/router";
 import firebase from "../../services/firebaseConnection";
 import styles from './styles.module.scss';
+import { toast } from 'react-toastify';
 
 type ProfessionProps = {
     id: number | string;
@@ -63,7 +64,11 @@ export default function Attendance() {
             
         } else {
 
-            event.preventDefault();
+            // event.preventDefault();
+
+            // const checkBoxs = document.querySelectorAll('.check-pgto');
+
+            // checkBoxs.forEach(item => console.log(item));
 
             if (localStorage.getItem('consig@register')) {
 
@@ -76,7 +81,16 @@ export default function Attendance() {
                     })
                 ))
 
-            }            
+                event.preventDefault();
+                Router.push('/reviews');
+
+            } else {
+
+                toast.error('Conclua o cadastro básico!');
+                event.preventDefault();
+                Router.push('/');
+
+            }       
 
         }
 
