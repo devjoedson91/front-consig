@@ -1,11 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from './styles.module.scss';
 
 type AccordionProps = {
+    isCheckedPix: boolean;
+    isCheckedCash: boolean;
     onChange: () => void;
 }
 
-export default function Accordion({onChange}: AccordionProps) {
+export default function Accordion({isCheckedCash, isCheckedPix, onChange}: AccordionProps) {
+
+    useEffect(() => {
+
+        if (isCheckedCash || isCheckedPix) {
+
+            setCheckCard(false);
+            const accordionItemOpened = document.querySelector(`[data-accordion-body="1"]`);
+            accordionItemOpened.classList.remove(`${styles.active}`);
+
+        }
+        
+        
+    }, [isCheckedCash, isCheckedPix]);
 
     const [isCheckedOne, setIsCheckedOne] = useState(false);
     const [isCheckedTwo, setIsCheckedTwo] = useState(false);
@@ -14,10 +29,10 @@ export default function Accordion({onChange}: AccordionProps) {
 
     function handleClickAccordion(event) {
 
-        const accordionId = event.target.dataset.accordionHeader;
-        const accordionItemOpened = document.querySelector(`[data-accordion-body="${accordionId}"]`);
+        // const accordionId = event.target.dataset.accordionHeader;
+        const accordionItemOpened = document.querySelector(`[data-accordion-body="1"]`);
         accordionItemOpened.classList.toggle(`${styles.active}`);
-
+        
     }
 
     return (
@@ -30,9 +45,9 @@ export default function Accordion({onChange}: AccordionProps) {
                         type="checkbox"
                         id="checkCard"
                         data-accordion-header="1"
-                        onClick={(e) => handleClickAccordion(e)}
                         checked={checkCard}
-                        onChange={() => {
+                        onChange={(e) => {
+                            handleClickAccordion(e)
                             setCheckCard(!checkCard);
                             onChange();
                         }}

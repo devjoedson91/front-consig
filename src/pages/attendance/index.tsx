@@ -20,8 +20,7 @@ export default function Attendance() {
     const [valueConsulta, setValueConsulta] = useState('');
     const [checkPix, setCheckPix] = useState(false);
     const [checkCash, setCheckCash] = useState(false);
-    const [checkCard, setCheckCard] = useState(false);
-
+    
     useEffect(() => {
 
         async function getEspecialidades() {
@@ -158,7 +157,6 @@ export default function Attendance() {
                                                 checked={checkPix}
                                                 onChange={() => {
                                                     setCheckPix(!checkPix);
-                                                    setCheckCard(false);
                                                 }}
                                             />
                                                 <label htmlFor="checkPix" className="form-check-label ms-4">
@@ -177,7 +175,6 @@ export default function Attendance() {
                                                 checked={checkCash}
                                                 onChange={() => {
                                                     setCheckCash(!checkCash);
-                                                    setCheckCard(false);
                                                 }}
                                             />
                                                 <label htmlFor="checkCash" className="form-check-label ms-4">
@@ -191,6 +188,8 @@ export default function Attendance() {
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
                                             <Accordion 
+                                                isCheckedPix={checkPix}
+                                                isCheckedCash={checkCash}
                                                 onChange={changeItens}
                                             />
                                         </div>
