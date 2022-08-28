@@ -20,7 +20,9 @@ export default function Attendance() {
     const [especialidade, setEspecialidade] = useState('');
     const [valueConsulta, setValueConsulta] = useState('');
     const [checkPix, setCheckPix] = useState(false);
-    const [checkCash, setCheckCash] = useState(false);
+    const [checkDinheiro, setCheckDinheiro] = useState(false);
+    const [formPgto, setFormPgto] = useState('');
+    const [qtdeParcelas, setQtdeParcelas] = useState(undefined);
     
     useEffect(() => {
 
@@ -36,7 +38,20 @@ export default function Attendance() {
 
         getEspecialidades();
 
+
     }, []);
+
+    useEffect(() => {
+
+        if (checkPix && checkDinheiro) {
+            setFormPgto('Pix e Dinheiro');
+        } else if (checkPix) {
+            setFormPgto('Pix');
+        } else if (checkDinheiro) {
+            setFormPgto('Dinheiro');
+        } 
+
+    }, [checkPix, checkDinheiro]);
 
     function maskValue(value: string) {
 
@@ -63,13 +78,7 @@ export default function Attendance() {
             form.classList.add('was-validated');
             
         } else {
-
-            // event.preventDefault();
-
-            // const checkBoxs = document.querySelectorAll('.check-pgto');
-
-            // checkBoxs.forEach(item => console.log(item));
-
+            
             if (localStorage.getItem('consig@register')) {
 
                 let dataEdit = JSON.parse(localStorage.getItem('consig@register'));
@@ -77,7 +86,9 @@ export default function Attendance() {
                 localStorage.setItem('consig@register', JSON.stringify(
                     Object.assign(dataEdit, {
                         especialidade,
-                        valueConsulta
+                        valueConsulta,
+                        formPgto,
+                        qtdeParcelas
                     })
                 ))
 
@@ -96,9 +107,19 @@ export default function Attendance() {
 
     }
 
+    function getCheckedCartao(value: boolean) {
+
+        if (value) setFormPgto('Cartão de Crédito');
+
+    }
+
     function changeItens() {
-        setCheckCash(false);
+        setCheckDinheiro(false);
         setCheckPix(false);
+    }
+
+    function getQtdeParcelas(value: number) {
+        setQtdeParcelas(value);
     }
 
     return (
@@ -111,7 +132,6 @@ export default function Attendance() {
             <div className="container mt-4 mb-4 p-4">
                 <div className="row align-items-center">
                     <div className="col-md-7">
-
                         <h2 className="mb-4">Sobre o profissional</h2>
 
                         <h5 className="mb-4 fw-semibold">Detalhes do atendimento</h5>
@@ -184,15 +204,15 @@ export default function Attendance() {
                                         <div className="form-check">
                                             <input 
                                                 className="form-check-input check-pgto ms-4" type="checkbox" 
-                                                id="checkCash" 
+                                                id="checkDinheiro" 
                                                 value="Dinheiro"
-                                                checked={checkCash}
+                                                checked={checkDinheiro}
                                                 onChange={() => {
-                                                    setCheckCash(!checkCash);
+                                                    setCheckDinheiro(!checkDinheiro);
                                                 }}
                                             />
-                                                <label htmlFor="checkCash" className="form-check-label ms-4">
-                                                    Em dinheiro
+                                                <label htmlFor="checkDinheiro" className="form-check-label ms-4">
+                                                    Dinheiro
                                                 </label>
                                         </div>
                                     </div>
@@ -203,8 +223,10 @@ export default function Attendance() {
                                         <div className="form-check">
                                             <Accordion 
                                                 isCheckedPix={checkPix}
-                                                isCheckedCash={checkCash}
-                                                onChange={changeItens}
+                                                isCheckedDinheiro={checkDinheiro}
+                                                changeItens={changeItens}
+                                                getCheckedCartao={getCheckedCartao}
+                                                getQtdeParcelas={getQtdeParcelas}
                                             />
                                         </div>
                                     </div>

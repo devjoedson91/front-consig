@@ -1,37 +1,44 @@
 import React, { useEffect, useState } from "react";
 import styles from './styles.module.scss';
 
-type AccordionProps = {
+export type AccordionProps = {
     isCheckedPix: boolean;
-    isCheckedCash: boolean;
-    onChange: () => void;
+    isCheckedDinheiro: boolean;
+    getQtdeParcelas: (value: number | string) => void;
+    getCheckedCartao: (value: boolean) => void;
+    changeItens: () => void;
 }
 
-export default function Accordion({isCheckedCash, isCheckedPix, onChange}: AccordionProps) {
+export default function Accordion({isCheckedDinheiro, isCheckedPix, getQtdeParcelas, changeItens, getCheckedCartao}: AccordionProps) {
 
+    const [isCheckedOne, setIsCheckedOne] = useState(false);
+    const [isCheckedTwo, setIsCheckedTwo] = useState(false);
+    const [isCheckedThree, setIsCheckedThree] = useState(false);
+    const [checkCard, setCheckCard] = useState(false);
+    
     useEffect(() => {
 
-        if (isCheckedCash || isCheckedPix) {
+        if (isCheckedDinheiro || isCheckedPix) {
 
             setCheckCard(false);
+            setIsCheckedOne(false);
+            setIsCheckedTwo(false);
+            setIsCheckedThree(false);
             const accordionItemOpened = document.querySelector(`[data-accordion-body="1"]`);
             accordionItemOpened.classList.remove(`${styles.active}`);
 
         }
         
         
-    }, [isCheckedCash, isCheckedPix]);
+    }, [isCheckedDinheiro, isCheckedPix]);
 
-    const [isCheckedOne, setIsCheckedOne] = useState(false);
-    const [isCheckedTwo, setIsCheckedTwo] = useState(false);
-    const [isCheckedThree, setIsCheckedThree] = useState(false);
-    const [checkCard, setCheckCard] = useState(false);
+    function handleAccordion(event) {
 
-    function handleClickAccordion(event) {
-
-        // const accordionId = event.target.dataset.accordionHeader;
-        const accordionItemOpened = document.querySelector(`[data-accordion-body="1"]`);
+        const accordionId = event.target.dataset.accordionHeader;
+        const accordionItemOpened = document.querySelector(`[data-accordion-body="${accordionId}"]`);
         accordionItemOpened.classList.toggle(`${styles.active}`);
+        setCheckCard(!checkCard);
+        changeItens();
         
     }
 
@@ -47,9 +54,8 @@ export default function Accordion({isCheckedCash, isCheckedPix, onChange}: Accor
                         data-accordion-header="1"
                         checked={checkCard}
                         onChange={(e) => {
-                            handleClickAccordion(e)
-                            setCheckCard(!checkCard);
-                            onChange();
+                            handleAccordion(e);
+                            getCheckedCartao(true);
                         }}
                     />
                     <label htmlFor="checkCard" className="form-check-label ms-4" data-accordion-header="1">
@@ -71,9 +77,10 @@ export default function Accordion({isCheckedCash, isCheckedPix, onChange}: Accor
                                 id="1x"
                                 checked={isCheckedOne}
                                 onChange={() => {
-                                    setIsCheckedOne(!isCheckedOne)
+                                    setIsCheckedOne(!isCheckedOne);
                                     setIsCheckedTwo(false);
                                     setIsCheckedThree(false);
+                                    getQtdeParcelas(1);
                                 }}
                                                                 
                             />
@@ -89,9 +96,10 @@ export default function Accordion({isCheckedCash, isCheckedPix, onChange}: Accor
                                 id="2x"
                                 checked={isCheckedTwo}
                                 onChange={(e) => {
-                                    setIsCheckedOne(false)
+                                    setIsCheckedOne(false);
                                     setIsCheckedTwo(!isCheckedTwo);
                                     setIsCheckedThree(false);
+                                    getQtdeParcelas(2);
                                 }}                        
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="2x">
@@ -109,6 +117,7 @@ export default function Accordion({isCheckedCash, isCheckedPix, onChange}: Accor
                                     setIsCheckedOne(false)
                                     setIsCheckedTwo(false);
                                     setIsCheckedThree(!isCheckedThree);
+                                    getQtdeParcelas(3);
                                 }}                            
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="3x">

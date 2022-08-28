@@ -5,32 +5,35 @@ import Button from "../../components/Button";
 import Image from "next/image";
 import Link from "next/link";
 
+interface PropsData {
+    nome: string;
+    cpf: string;
+    phone: string;
+    uf: string;
+    city: string;
+    especialidade: string;
+    valueConsulta: string;
+    formPgto: string;
+    qtdeParcelas: number | string;
+}
+
 export default function Reviews() {
+
+    const [listData, setListData] = useState<PropsData>();
 
     useEffect(() => {
 
-        if (localStorage.getItem('consig@register')) {
+        async function loadData() {
 
-            const listData = JSON.parse(localStorage.getItem('consig@register'));
-            setNome(listData.nome);
-            setCpf(listData.cpf);
-            setPhone(listData.phone);
-            setUf(listData.uf);
-            setCity(listData.city);
-            setEspecialidade(listData.especialidade);
-            setValueConsulta(listData.valueConsulta);
+            const data = await JSON.parse(localStorage.getItem('consig@register'));
+
+            setListData(data);
 
         }
 
-    }, []);
+        loadData();
 
-    const [nome, setNome] = useState('');
-    const [cpf, setCpf] = useState('');
-    const [phone, setPhone] = useState('');
-    const [uf, setUf] = useState('');
-    const [city, setCity] = useState('');
-    const [especialidade, setEspecialidade] = useState('');
-    const [valueConsulta, setValueConsulta] = useState('');
+    }, []);
 
     return (
 
@@ -47,43 +50,48 @@ export default function Reviews() {
                         <div className="row mb-3">
 
                             <label htmlFor="nome" className="fw-bold">Nome completo</label>
-                            <div className="fs-6" >{nome}</div>
+                            <div className="fs-6">{listData && listData.nome}</div>
 
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">CPF</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6" >{cpf}</div>
+                                <div className="fs-6">{listData && listData.cpf}</div>
                             </div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Numero de celular ou telefone</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6" >{phone}</div>
+                                <div className="fs-6" >{listData && listData.phone}</div>
                             </div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Estado/Cidade</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6" >{`${uf} - ${city}`}</div>
+                                <div className="fs-6">{listData && `${listData.uf} - ${listData.city}`}</div>
                             </div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Especialidade principal</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6" >{especialidade}</div>
+                                <div className="fs-6">{listData && listData.especialidade}</div>
                             </div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Preço da consulta</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6" >{valueConsulta}</div>
+                                <div className="fs-6">{listData && listData.valueConsulta}</div>
                             </div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Forma de pagamento da consulta</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6">Dinheiro</div>
+                                <div className="fs-6">
+                                    {listData && 
+                                    
+                                    `${listData.formPgto}`}
+                                    
+                                </div>
                             </div>
                         </div>
 
