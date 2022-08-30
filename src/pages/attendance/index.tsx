@@ -21,8 +21,10 @@ export default function Attendance() {
     const [valueConsulta, setValueConsulta] = useState('');
     const [checkPix, setCheckPix] = useState(false);
     const [checkDinheiro, setCheckDinheiro] = useState(false);
+    const [checkedCartao, setCheckedCartao] = useState(false);
     const [formPgto, setFormPgto] = useState('');
     const [qtdeParcelas, setQtdeParcelas] = useState(undefined);
+    const [isRequired, setIsRequired] = useState(true);
     
     useEffect(() => {
 
@@ -108,8 +110,10 @@ export default function Attendance() {
     }
 
     function getCheckedCartao(value: boolean) {
-
+        
         if (value) setFormPgto('Cartão de Crédito');
+        setCheckedCartao(value);
+        setIsRequired(!value);
 
     }
 
@@ -118,8 +122,8 @@ export default function Attendance() {
         setCheckPix(false);
     }
 
-    function getQtdeParcelas(value: number) {
-        setQtdeParcelas(value);
+    function getQtdeParcelas(qtdeParcelas: number) {
+        setQtdeParcelas(qtdeParcelas);
     }
 
     return (
@@ -161,20 +165,21 @@ export default function Attendance() {
 
                             <div className="mb-3">
                                 <label className="form-label">Informe o preço da consulta*</label>
-                                <div className="input-group flex-nowrap">
+                                <div className="input-group has-validation">
                                     <span className={`${styles.bgMain} input-group-text`}>R$</span>
                                     <input 
                                         type="text" 
                                         className="form-control" 
+                                        aria-describedby="validationTooltipUsernamePrepend"
                                         maxLength={6}
                                         placeholder="Valor" 
                                         value={valueConsulta}
                                         required 
                                         onChange={(e) => setValueConsulta(maskValue(e.target.value))}
                                     />
-                                </div>
-                                <div className="invalid-feedback">
-                                    Error message
+                                    <div className="invalid-feedback">
+                                        Error message
+                                    </div>
                                 </div>
                             </div>
 
@@ -191,11 +196,14 @@ export default function Attendance() {
                                                 checked={checkPix}
                                                 onChange={() => {
                                                     setCheckPix(!checkPix);
+                                                    setIsRequired(!isRequired);
                                                 }}
+                                                required={isRequired}
                                             />
                                                 <label htmlFor="checkPix" className="form-check-label ms-4">
                                                     Pix
                                                 </label>
+                                                
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +217,9 @@ export default function Attendance() {
                                                 checked={checkDinheiro}
                                                 onChange={() => {
                                                     setCheckDinheiro(!checkDinheiro);
+                                                    setIsRequired(!isRequired);
                                                 }}
+                                                required={isRequired}
                                             />
                                                 <label htmlFor="checkDinheiro" className="form-check-label ms-4">
                                                     Dinheiro

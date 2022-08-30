@@ -86,12 +86,7 @@ export default function Reviews() {
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Forma de pagamento da consulta</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6">
-                                    {listData && 
-                                    
-                                    `${listData.formPgto}`}
-                                    
-                                </div>
+                                <div className="fs-6">{listData && `${listData.formPgto} ${listData.qtdeParcelas ? listData.qtdeParcelas+'x' : ''}`} </div>
                             </div>
                         </div>
 

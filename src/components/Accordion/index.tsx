@@ -4,22 +4,31 @@ import styles from './styles.module.scss';
 export type AccordionProps = {
     isCheckedPix: boolean;
     isCheckedDinheiro: boolean;
-    getQtdeParcelas: (value: number | string) => void;
+    getQtdeParcelas: (qtdeParcelas: number | string) => void;
     getCheckedCartao: (value: boolean) => void;
     changeItens: () => void;
 }
 
-export default function Accordion({isCheckedDinheiro, isCheckedPix, getQtdeParcelas, changeItens, getCheckedCartao}: AccordionProps) {
+export default function Accordion({
+    isCheckedDinheiro, 
+    isCheckedPix, 
+    getQtdeParcelas, 
+    getCheckedCartao,
+    changeItens
+}: AccordionProps) {
 
     const [isCheckedOne, setIsCheckedOne] = useState(false);
     const [isCheckedTwo, setIsCheckedTwo] = useState(false);
     const [isCheckedThree, setIsCheckedThree] = useState(false);
     const [checkCard, setCheckCard] = useState(false);
+    const [isRequired, setIsRequired] = useState(true);
+    const [itemRequired, setItemRequired] = useState(true);
     
     useEffect(() => {
 
-        if (isCheckedDinheiro || isCheckedPix) {
+        if (isCheckedPix || isCheckedDinheiro) {
 
+            setIsRequired(false);
             setCheckCard(false);
             setIsCheckedOne(false);
             setIsCheckedTwo(false);
@@ -32,6 +41,7 @@ export default function Accordion({isCheckedDinheiro, isCheckedPix, getQtdeParce
         
     }, [isCheckedDinheiro, isCheckedPix]);
 
+
     function handleAccordion(event) {
 
         const accordionId = event.target.dataset.accordionHeader;
@@ -40,6 +50,26 @@ export default function Accordion({isCheckedDinheiro, isCheckedPix, getQtdeParce
         setCheckCard(!checkCard);
         changeItens();
         
+    }
+
+    function dadosParcelamento(elementValue) {
+
+        setItemRequired(!itemRequired);
+
+        switch (elementValue) {
+            case '1x':
+                getQtdeParcelas(1);
+                break;
+            case '2x':
+                getQtdeParcelas(2);
+                break;
+            case '3x':
+                getQtdeParcelas(3);
+                break;
+            default:
+                console.log('Não foram encontradas novas opções de parcelamento');
+        }
+
     }
 
     return (
@@ -56,7 +86,9 @@ export default function Accordion({isCheckedDinheiro, isCheckedPix, getQtdeParce
                         onChange={(e) => {
                             handleAccordion(e);
                             getCheckedCartao(true);
+                            setIsRequired(!isRequired);
                         }}
+                        required={isRequired}
                     />
                     <label htmlFor="checkCard" className="form-check-label ms-4" data-accordion-header="1">
                         Cartão de Crédito
@@ -76,13 +108,13 @@ export default function Accordion({isCheckedDinheiro, isCheckedPix, getQtdeParce
                                 value="1x" 
                                 id="1x"
                                 checked={isCheckedOne}
-                                onChange={() => {
+                                onChange={(e) => {
                                     setIsCheckedOne(!isCheckedOne);
                                     setIsCheckedTwo(false);
                                     setIsCheckedThree(false);
-                                    getQtdeParcelas(1);
+                                    dadosParcelamento(e.target.value);
                                 }}
-                                                                
+                                                             
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="1x">
                                 1x sem juros
@@ -99,8 +131,9 @@ export default function Accordion({isCheckedDinheiro, isCheckedPix, getQtdeParce
                                     setIsCheckedOne(false);
                                     setIsCheckedTwo(!isCheckedTwo);
                                     setIsCheckedThree(false);
-                                    getQtdeParcelas(2);
-                                }}                        
+                                    dadosParcelamento(e.target.value);
+                                }}
+                                                
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="2x">
                                 2x sem juros
@@ -117,8 +150,9 @@ export default function Accordion({isCheckedDinheiro, isCheckedPix, getQtdeParce
                                     setIsCheckedOne(false)
                                     setIsCheckedTwo(false);
                                     setIsCheckedThree(!isCheckedThree);
-                                    getQtdeParcelas(3);
-                                }}                            
+                                    dadosParcelamento(e.target.value);
+                                }}
+                                                       
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="3x">
                                 3x sem juros
