@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import styles from './styles.module.scss';
 
 export type AccordionProps = {
@@ -21,14 +22,15 @@ export default function Accordion({
     const [isCheckedTwo, setIsCheckedTwo] = useState(false);
     const [isCheckedThree, setIsCheckedThree] = useState(false);
     const [checkCard, setCheckCard] = useState(false);
-    const [isRequired, setIsRequired] = useState(true);
+    const [cardRequired, setCardRequired] = useState(true);
     const [itemRequired, setItemRequired] = useState(true);
-    
+        
     useEffect(() => {
 
         if (isCheckedPix || isCheckedDinheiro) {
 
-            setIsRequired(false);
+            setItemRequired(false);
+            setCardRequired(false);
             setCheckCard(false);
             setIsCheckedOne(false);
             setIsCheckedTwo(false);
@@ -40,6 +42,18 @@ export default function Accordion({
         
         
     }, [isCheckedDinheiro, isCheckedPix]);
+
+    useEffect(() => {
+
+        if (isCheckedOne || isCheckedTwo || isCheckedThree) setItemRequired(false);
+
+    }, [isCheckedOne, isCheckedTwo, isCheckedThree]);
+
+    useEffect(() => {
+
+        if (checkCard) setItemRequired(true);
+
+    }, [checkCard]);
 
 
     function handleAccordion(event) {
@@ -54,8 +68,6 @@ export default function Accordion({
 
     function dadosParcelamento(elementValue) {
 
-        setItemRequired(!itemRequired);
-
         switch (elementValue) {
             case '1x':
                 getQtdeParcelas(1);
@@ -67,7 +79,7 @@ export default function Accordion({
                 getQtdeParcelas(3);
                 break;
             default:
-                console.log('Não foram encontradas novas opções de parcelamento');
+                toast.warning('Não foram encontradas novas opções de parcelamento');
         }
 
     }
@@ -86,9 +98,9 @@ export default function Accordion({
                         onChange={(e) => {
                             handleAccordion(e);
                             getCheckedCartao(true);
-                            setIsRequired(!isRequired);
+                            setCardRequired(!cardRequired);
                         }}
-                        required={isRequired}
+                        required={cardRequired}
                     />
                     <label htmlFor="checkCard" className="form-check-label ms-4" data-accordion-header="1">
                         Cartão de Crédito
@@ -114,7 +126,7 @@ export default function Accordion({
                                     setIsCheckedThree(false);
                                     dadosParcelamento(e.target.value);
                                 }}
-                                                             
+                                required={itemRequired}                           
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="1x">
                                 1x sem juros
@@ -133,7 +145,7 @@ export default function Accordion({
                                     setIsCheckedThree(false);
                                     dadosParcelamento(e.target.value);
                                 }}
-                                                
+                                required={itemRequired}            
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="2x">
                                 2x sem juros
@@ -152,7 +164,7 @@ export default function Accordion({
                                     setIsCheckedThree(!isCheckedThree);
                                     dadosParcelamento(e.target.value);
                                 }}
-                                                       
+                                required={itemRequired}                       
                             />
                             <label className="form-check-label check-label ms-2" htmlFor="3x">
                                 3x sem juros

@@ -25,6 +25,13 @@ export default function Attendance() {
     const [formPgto, setFormPgto] = useState('');
     const [qtdeParcelas, setQtdeParcelas] = useState(undefined);
     const [isRequired, setIsRequired] = useState(true);
+
+    useEffect(() => {
+
+        if (checkPix || checkDinheiro || checkedCartao) setIsRequired(false);
+        if (!checkedCartao) setQtdeParcelas('');
+
+    }, [checkPix, checkDinheiro, checkedCartao]);
     
     useEffect(() => {
 
@@ -113,7 +120,6 @@ export default function Attendance() {
         
         if (value) setFormPgto('Cartão de Crédito');
         setCheckedCartao(value);
-        setIsRequired(!value);
 
     }
 
@@ -196,7 +202,7 @@ export default function Attendance() {
                                                 checked={checkPix}
                                                 onChange={() => {
                                                     setCheckPix(!checkPix);
-                                                    setIsRequired(!isRequired);
+                                                    setCheckedCartao(false);
                                                 }}
                                                 required={isRequired}
                                             />
@@ -217,7 +223,7 @@ export default function Attendance() {
                                                 checked={checkDinheiro}
                                                 onChange={() => {
                                                     setCheckDinheiro(!checkDinheiro);
-                                                    setIsRequired(!isRequired);
+                                                    setCheckedCartao(false);
                                                 }}
                                                 required={isRequired}
                                             />
