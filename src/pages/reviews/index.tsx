@@ -4,15 +4,18 @@ import desktop03 from '../../../public/images/desktop-pagina-3.png';
 import Button from "../../components/Button";
 import Image from "next/image";
 import Link from "next/link";
+import firebase from '../../services/firebaseConnection';
+import Router from 'next/router';
+import { toast } from "react-toastify";
 
-interface PropsData {
+export interface PropsData {
     nome: string;
     cpf: string;
     phone: string;
-    uf: string;
+    estado: string;
     city: string;
     especialidade: string;
-    valueConsulta: string;
+    valorConsulta: string | number;
     formPgto: string;
     qtdeParcelas: number | string;
 }
@@ -34,6 +37,27 @@ export default function Reviews() {
         loadData();
 
     }, []);
+
+    async function handleRegister() {
+
+        if (localStorage.getItem('consig@register')) {
+
+            let users = await firebase.database().ref('dados_usuarios');
+            let key = users.push().key;
+
+            users.child(key).set(listData);
+
+            localStorage.clear();
+
+            toast.success('Cadastrado com sucesso!');
+
+            Router.push('/');
+
+        } else {
+            Router.push('/');
+        }
+
+    }
 
     return (
 
@@ -68,7 +92,7 @@ export default function Reviews() {
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Estado/Cidade</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6">{listData && `${listData.uf} - ${listData.city}`}</div>
+                                <div className="fs-6">{listData && `${listData.estado} - ${listData.city}`}</div>
                             </div>
                         </div>
                         <div className="mb-3">
@@ -80,7 +104,7 @@ export default function Reviews() {
                         <div className="mb-3">
                             <label htmlFor="cpf" className="fw-bold">Preço da consulta</label>
                             <div className="input-group flex-nowrap">
-                                <div className="fs-6">{listData && listData.valueConsulta}</div>
+                                <div className="fs-6">{listData && listData.valorConsulta}</div>
                             </div>
                         </div>
                         <div className="mb-3">
@@ -94,6 +118,7 @@ export default function Reviews() {
                             <Button 
                                 type="submit" 
                                 style={{backgroundColor: '#FBDE40', color: '#483698'}}
+                                onClick={handleRegister}
                             >
                                 CADASTRAR PROFISSIONAL
                             </Button>

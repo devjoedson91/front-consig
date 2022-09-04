@@ -5,6 +5,7 @@ import Image from "next/image";
 import Button from "../components/Button";
 import Router from "next/router";
 import firebase from "../services/firebaseConnection";
+import { PropsData } from '../pages/reviews';
 
 type stateProps = {
 
@@ -24,10 +25,12 @@ export default function Home() {
     const [listCity, setListCity] = useState<cityProps[]>([]);
     const [nome, setNome] = useState('');
     const [city, setCity] = useState('');
+    const [estado, setEstado] = useState('');
     const [uf, setUf] = useState('');
     const [cpf, setCpf] = useState('');
     const [phone, setPhone] = useState('');
-    
+    const [listData, setListData] = useState<PropsData>();
+
     useEffect(() => {
 
         async function getUf() {
@@ -42,8 +45,51 @@ export default function Home() {
 
         getUf();
 
-
     }, []);
+
+    useEffect(() => {
+
+        async function loadData() {
+
+            if (listUf.length > 0 && localStorage.getItem('consig@register')) {
+
+                const data = JSON.parse(localStorage.getItem('consig@register'));
+
+                setListData(data);
+
+                const optionsEstado = document.querySelectorAll('.option-select');
+
+                optionsEstado.forEach(option => {
+
+                    if (option.innerHTML === data.estado) {
+
+                        option.setAttribute('selected', 'selected');
+                        let optionValue = option.getAttribute('value');
+                        setUf(optionValue);
+
+                    }
+
+                });
+
+            }
+        }
+
+        loadData();
+
+    }, [listUf]);
+
+    useEffect(() => {
+        
+        if (listCity.length > 0 && localStorage.getItem('consig@register')) {
+            const optionsCity = document.querySelectorAll('.option-city');
+            optionsCity.forEach(cidade => {
+                if (cidade.innerHTML === listData.city) {
+                    cidade.setAttribute('selected', 'selected');
+                }
+            });
+        }
+
+    }, [listCity, listData]);
 
     useEffect(() => {
 
@@ -51,9 +97,9 @@ export default function Home() {
 
             await firebase.database().ref('cidades').once('value', (snapshot) => {
 
-                const list = snapshot.val().filter(item => {
+                const list = snapshot.val().filter(cidade => {
 
-                    if (item.uf === uf) return item;
+                    if (cidade.uf === uf) return cidade;
 
                 })
 
@@ -78,16 +124,16 @@ export default function Home() {
             event.preventDefault();
             event.stopPropagation();
             form.classList.add('was-validated');
-            
+
         } else {
 
-            const data = {nome, cpf, phone, uf, city};
+            const data = { nome, cpf, phone, estado, city };
 
             localStorage.setItem('consig@register', JSON.stringify(data));
 
             event.preventDefault();
             Router.push('/attendance');
-            
+
 
         }
 
@@ -112,7 +158,7 @@ export default function Home() {
         let phoneText = value.replace(/\D/g, "");
 
         phoneText = phoneText.replace(/^0/, "");
-        
+
         if (phoneText.length > 10) {
             phoneText = phoneText.replace(/^(\d\d)(\d{5})(\d{4}).*/, "($1) $2-$3");
         } else if (phoneText.length > 2) {
@@ -150,7 +196,7 @@ export default function Home() {
                                     placeholder="Digite o nome completo"
                                     minLength={3}
                                     maxLength={48}
-                                    value={nome}
+                                    value={listData && listData.nome || nome}
                                     onChange={(e) => setNome(e.target.value)}
                                     required
                                 />
@@ -168,7 +214,7 @@ export default function Home() {
                                     placeholder="Digite um CPF"
                                     maxLength={14}
                                     autoComplete="off"
-                                    value={cpf}
+                                    value={listData && listData.cpf || cpf}
                                     onChange={(e) => setCpf(maskCpf(e.target.value))}
                                     required
                                 />
@@ -185,7 +231,7 @@ export default function Home() {
                                     className="form-control"
                                     placeholder="(00) 00000-0000"
                                     maxLength={16}
-                                    value={phone}
+                                    value={listData && listData.phone || phone}
                                     onChange={(e) => setPhone(maskPhone(e.target.value))}
                                     required
                                 />
@@ -199,8 +245,12 @@ export default function Home() {
                                 <div className="col-6 inputState">
                                     <label className="form-label">Estado*</label>
                                     <select
-                                        onChange={(e) => setUf(e.target.value)}
-                                        className="form-select"
+                                        onChange={(e) => {
+                                            setUf(e.target.value);
+                                            setEstado(e.target.options[e.target.selectedIndex].text);
+                                        }}
+                                        className="form-select estados"
+                                        name="estado"
                                         required
                                     >
                                         <option value="">Selecione</option>
@@ -210,6 +260,7 @@ export default function Home() {
                                                 <option
                                                     key={estado.id}
                                                     value={estado.sigla}
+                                                    className="option-select"
                                                 >
                                                     {estado.nome}
                                                 </option>
@@ -227,13 +278,19 @@ export default function Home() {
                                     <select
                                         onChange={(e) => setCity(e.target.value)}
                                         className="form-select"
+                                        name="cidade"
                                         required
                                     >
                                         <option value="">Selecione</option>
                                         {listCity.map(cidade => {
 
                                             return (
-                                                <option key={cidade.id}>{cidade.nome}</option>
+                                                <option
+                                                    key={cidade.id}
+                                                    className="option-city"
+                                                >
+                                                    {cidade.nome}
+                                                </option>
                                             );
 
                                         })}
@@ -248,12 +305,12 @@ export default function Home() {
                             <div className="row justify-content-center">
                                 <div className="col-9">
                                     <h6 className="num-pagina-progress">1 de 2</h6>
-                                    <div className="progress mb-3" style={{ height: 20}}>
-                                        <div className="progress-bar" role="progressbar" style={{ width: '33.33%', backgroundColor: '#483698'}} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}></div>
+                                    <div className="progress mb-3" style={{ height: 20 }}>
+                                        <div className="progress-bar" role="progressbar" style={{ width: '33.33%', backgroundColor: '#483698' }} aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}></div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <Button type="submit">PROXIMO</Button>
 
                         </form>

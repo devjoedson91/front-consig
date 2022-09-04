@@ -18,7 +18,7 @@ export default function Attendance() {
 
     const [listEspecialidades, setListEspecialidades] = useState<ProfessionProps[]>([]);
     const [especialidade, setEspecialidade] = useState('');
-    const [valueConsulta, setValueConsulta] = useState('');
+    const [valorConsulta, setValorConsulta] = useState('');
     const [checkPix, setCheckPix] = useState(false);
     const [checkDinheiro, setCheckDinheiro] = useState(false);
     const [checkedCartao, setCheckedCartao] = useState(false);
@@ -95,7 +95,7 @@ export default function Attendance() {
                 localStorage.setItem('consig@register', JSON.stringify(
                     Object.assign(dataEdit, {
                         especialidade,
-                        valueConsulta,
+                        valorConsulta,
                         formPgto,
                         qtdeParcelas
                     })
@@ -179,9 +179,9 @@ export default function Attendance() {
                                         aria-describedby="validationTooltipUsernamePrepend"
                                         maxLength={6}
                                         placeholder="Valor" 
-                                        value={valueConsulta}
+                                        value={valorConsulta}
                                         required 
-                                        onChange={(e) => setValueConsulta(maskValue(e.target.value))}
+                                        onChange={(e) => setValorConsulta(maskValue(e.target.value))}
                                     />
                                     <div className="invalid-feedback">
                                         Error message
