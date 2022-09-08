@@ -29,8 +29,7 @@ export default function Home() {
     const [uf, setUf] = useState('');
     const [cpf, setCpf] = useState('');
     const [phone, setPhone] = useState('');
-    const [listData, setListData] = useState<PropsRegister>();
-        
+            
     const [storageRegister, setStorageRegister] = useState<PropsRegister[]>(() => {
 
         const storagedData = typeof window !== 'undefined' ? localStorage.getItem('consig@register') : null;
@@ -63,11 +62,13 @@ export default function Home() {
 
         async function loadData() {
 
-            if (listUf.length > 0 && listCity.length > 0 && storageRegister) {
+            if (listUf.length > 0 && storageRegister) {
 
                 storageRegister.map(data => {
 
-                    setListData(data);
+                    setNome(data.nome);
+                    setCpf(data.cpf);
+                    setPhone(data.phone);
 
                     const optionsEstado = document.querySelectorAll('.option-select');
                     optionsEstado.forEach(option => {
@@ -218,7 +219,7 @@ export default function Home() {
                                     placeholder="Digite o nome completo"
                                     minLength={3}
                                     maxLength={48}
-                                    value={listData && listData.nome || nome}
+                                    value={nome}
                                     onChange={(e) => setNome(e.target.value)}
                                     required
                                 />
@@ -236,7 +237,7 @@ export default function Home() {
                                     placeholder="Digite um CPF"
                                     maxLength={14}
                                     autoComplete="off"
-                                    value={listData && listData.cpf || cpf}
+                                    value={cpf}
                                     onChange={(e) => setCpf(maskCpf(e.target.value))}
                                     required
                                 />
@@ -253,7 +254,7 @@ export default function Home() {
                                     className="form-control"
                                     placeholder="(00) 00000-0000"
                                     maxLength={16}
-                                    value={listData && listData.phone || phone}
+                                    value={phone}
                                     onChange={(e) => setPhone(maskPhone(e.target.value))}
                                     required
                                 />
