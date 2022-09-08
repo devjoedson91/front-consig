@@ -7,22 +7,11 @@ import Link from "next/link";
 import firebase from '../../services/firebaseConnection';
 import Router from 'next/router';
 import { toast } from "react-toastify";
-
-export interface PropsData {
-    nome: string;
-    cpf: string;
-    phone: string;
-    estado: string;
-    city: string;
-    especialidade: string;
-    valorConsulta: string | number;
-    formPgto: string;
-    qtdeParcelas: number | string;
-}
+import { PropsRegister } from "../../types";
 
 export default function Reviews() {
 
-    const [listData, setListData] = useState<PropsData>();
+    const [listData, setListData] = useState<PropsRegister>();
 
     useEffect(() => {
 

@@ -5,7 +5,7 @@ import Image from "next/image";
 import Button from "../components/Button";
 import Router from "next/router";
 import firebase from "../services/firebaseConnection";
-import { PropsData } from '../pages/reviews';
+import { PropsRegister } from '../types';
 
 type stateProps = {
 
@@ -29,7 +29,19 @@ export default function Home() {
     const [uf, setUf] = useState('');
     const [cpf, setCpf] = useState('');
     const [phone, setPhone] = useState('');
-    const [listData, setListData] = useState<PropsData>();
+    const [listData, setListData] = useState<PropsRegister>();
+        
+    const [storageRegister, setStorageRegister] = useState<PropsRegister[]>(() => {
+
+        const storagedData = typeof window !== 'undefined' ? localStorage.getItem('consig@register') : null;
+
+        if (storagedData) {
+            return JSON.parse(storagedData);
+        }
+
+        return [];
+
+    });
 
     useEffect(() => {
 
@@ -51,23 +63,32 @@ export default function Home() {
 
         async function loadData() {
 
-            if (listUf.length > 0 && localStorage.getItem('consig@register')) {
+            if (listUf.length > 0 && listCity.length > 0 && storageRegister) {
 
-                const data = JSON.parse(localStorage.getItem('consig@register'));
+                storageRegister.map(data => {
 
-                setListData(data);
+                    setListData(data);
 
-                const optionsEstado = document.querySelectorAll('.option-select');
+                    const optionsEstado = document.querySelectorAll('.option-select');
+                    optionsEstado.forEach(option => {
 
-                optionsEstado.forEach(option => {
+                        if (option.innerHTML === data.estado) {
 
-                    if (option.innerHTML === data.estado) {
+                            option.setAttribute('selected', 'selected');
+                            let optionValue = option.getAttribute('value');
+                            setUf(optionValue);
 
-                        option.setAttribute('selected', 'selected');
-                        let optionValue = option.getAttribute('value');
-                        setUf(optionValue);
+                        }
 
-                    }
+                    });
+
+                    const optionsCity = document.querySelectorAll('.option-city');
+                    optionsCity.forEach(cidade => {
+                        if (cidade.innerHTML === data.city) {
+                            cidade.setAttribute('selected', 'selected');
+                        }
+                    });
+
 
                 });
 
@@ -76,20 +97,7 @@ export default function Home() {
 
         loadData();
 
-    }, [listUf]);
-
-    useEffect(() => {
-        
-        if (listCity.length > 0 && localStorage.getItem('consig@register')) {
-            const optionsCity = document.querySelectorAll('.option-city');
-            optionsCity.forEach(cidade => {
-                if (cidade.innerHTML === listData.city) {
-                    cidade.setAttribute('selected', 'selected');
-                }
-            });
-        }
-
-    }, [listCity, listData]);
+    }, [listUf, listCity, storageRegister]);
 
     useEffect(() => {
 
@@ -127,9 +135,23 @@ export default function Home() {
 
         } else {
 
-            const data = { nome, cpf, phone, estado, city };
+            const udpateRegister = [...storageRegister];
 
-            localStorage.setItem('consig@register', JSON.stringify(data));
+            const newRegister = { 
+                nome, 
+                cpf, 
+                phone, 
+                estado, 
+                city,
+                especialidade: '',
+                valorConsulta: 0,
+                formPgto: '',
+                qtdeParcelas: 0
+            };
+
+            udpateRegister.push(newRegister);
+            setStorageRegister(udpateRegister);
+            localStorage.setItem('consig@register', JSON.stringify(udpateRegister));
 
             event.preventDefault();
             Router.push('/attendance');
