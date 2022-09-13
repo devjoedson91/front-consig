@@ -8,6 +8,7 @@ import firebase from '../../services/firebaseConnection';
 import Router from 'next/router';
 import { toast } from "react-toastify";
 import { PropsRegister } from "../../types";
+import { formatPrice } from "../../util/format";
 
 export default function Reviews() {
 
@@ -15,15 +16,16 @@ export default function Reviews() {
 
     useEffect(() => {
 
-        async function loadData() {
+        const storagedData = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('consig@register')) : null;
 
-            const data = await JSON.parse(localStorage.getItem('consig@register'));
-
-            setListData(data);
-
+        if (storagedData) {
+            storagedData.map(data => {
+                setListData({
+                    ...data,
+                    valorConsulta: formatPrice(parseFloat(data.valorConsulta))
+                });
+            });
         }
-
-        loadData();
 
     }, []);
 

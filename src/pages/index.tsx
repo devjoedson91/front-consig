@@ -47,30 +47,28 @@ export default function Home() {
         async function getUf() {
 
             await firebase.database().ref('estados').on('value', (snapshot) => {
-
                 setListUf(snapshot.val());
-
-            })
+            })        
 
         }
 
         getUf();
+        
+        setTimeout(() => {
 
-    }, []);
+            const getStorageData = typeof window !== 'undefined' ? 
+            JSON.parse(localStorage.getItem('consig@register')) : null;
 
-    useEffect(() => {
+            if (getStorageData) {
 
-        async function loadData() {
-
-            if (listUf.length > 0 && storageRegister) {
-
-                storageRegister.map(data => {
+                getStorageData.map(data => {
 
                     setNome(data.nome);
                     setCpf(data.cpf);
                     setPhone(data.phone);
 
                     const optionsEstado = document.querySelectorAll('.option-select');
+                    console.log(optionsEstado);
                     optionsEstado.forEach(option => {
 
                         if (option.innerHTML === data.estado) {
@@ -94,11 +92,10 @@ export default function Home() {
                 });
 
             }
-        }
 
-        loadData();
+        }, 2000);
 
-    }, [listUf, listCity, storageRegister]);
+    }, []);
 
     useEffect(() => {
 
@@ -149,6 +146,8 @@ export default function Home() {
                 formPgto: '',
                 qtdeParcelas: 0
             };
+
+            console.log(newRegister);
 
             udpateRegister.push(newRegister);
             setStorageRegister(udpateRegister);

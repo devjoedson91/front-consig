@@ -32,7 +32,7 @@ export default function Attendance() {
         if (!checkedCartao) setQtdeParcelas('');
 
     }, [checkPix, checkDinheiro, checkedCartao]);
-    
+
     useEffect(() => {
 
         async function getEspecialidades() {
@@ -58,7 +58,7 @@ export default function Attendance() {
             setFormPgto('Pix');
         } else if (checkDinheiro) {
             setFormPgto('Dinheiro');
-        } 
+        }
 
     }, [checkPix, checkDinheiro]);
 
@@ -67,13 +67,13 @@ export default function Attendance() {
         let elementValue = value.replace(/\D/g, '');
 
         if (elementValue.length > 4) {
-            elementValue = elementValue.replace(/(\d{3})(\d)/, '$1,$2');            
+            elementValue = elementValue.replace(/(\d{3})(\d)/, '$1,$2');
         } else if (elementValue.length < 5) {
             elementValue = elementValue.replace(/(\d{2})(\d)/, '$1,$2');
         }
 
         return elementValue;
-            
+
     }
 
     async function handleRegister(event: FormEvent<HTMLFormElement>) {
@@ -85,21 +85,26 @@ export default function Attendance() {
             event.preventDefault();
             event.stopPropagation();
             form.classList.add('was-validated');
-            
+
         } else {
-            
+
             if (localStorage.getItem('consig@register')) {
 
-                let dataEdit = JSON.parse(localStorage.getItem('consig@register'));
+                let getStorageData = JSON.parse(localStorage.getItem('consig@register'));
 
-                localStorage.setItem('consig@register', JSON.stringify(
-                    Object.assign(dataEdit, {
-                        especialidade,
-                        valorConsulta,
-                        formPgto,
-                        qtdeParcelas
-                    })
-                ))
+                const attendanceRegister = {
+                    especialidade: especialidade,
+                    valorConsulta: valorConsulta,
+                    formPgto: formPgto,
+                    qtdeParcelas: qtdeParcelas
+                }
+
+                const completeRegister = [{
+                    ...getStorageData[0],
+                    ...attendanceRegister
+                }]
+
+                localStorage.setItem('consig@register', JSON.stringify(completeRegister));
 
                 event.preventDefault();
                 Router.push('/reviews');
@@ -110,14 +115,14 @@ export default function Attendance() {
                 event.preventDefault();
                 Router.push('/');
 
-            }       
+            }
 
         }
 
     }
 
     function getCheckedCartao(value: boolean) {
-        
+
         if (value) setFormPgto('Cartão de Crédito');
         setCheckedCartao(value);
 
@@ -173,14 +178,14 @@ export default function Attendance() {
                                 <label className="form-label">Informe o preço da consulta*</label>
                                 <div className="input-group has-validation">
                                     <span className={`${styles.bgMain} input-group-text`}>R$</span>
-                                    <input 
-                                        type="text" 
-                                        className="form-control" 
+                                    <input
+                                        type="text"
+                                        className="form-control"
                                         aria-describedby="validationTooltipUsernamePrepend"
                                         maxLength={6}
-                                        placeholder="Valor" 
+                                        placeholder="Valor"
                                         value={valorConsulta}
-                                        required 
+                                        required
                                         onChange={(e) => setValorConsulta(maskValue(e.target.value))}
                                     />
                                     <div className="invalid-feedback">
@@ -195,9 +200,9 @@ export default function Attendance() {
                                 <div className="breadcrumb mb-3 shadow p-3 bg-body rounded">
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
-                                            <input 
-                                                className="form-check-input check-pgto ms-4" type="checkbox" 
-                                                id="checkPix" 
+                                            <input
+                                                className="form-check-input check-pgto ms-4" type="checkbox"
+                                                id="checkPix"
                                                 value="Pix"
                                                 checked={checkPix}
                                                 onChange={() => {
@@ -206,19 +211,19 @@ export default function Attendance() {
                                                 }}
                                                 required={isRequired}
                                             />
-                                                <label htmlFor="checkPix" className="form-check-label ms-4">
-                                                    Pix
-                                                </label>
-                                                
+                                            <label htmlFor="checkPix" className="form-check-label ms-4">
+                                                Pix
+                                            </label>
+
                                         </div>
                                     </div>
                                 </div>
                                 <div className="breadcrumb mb-3 shadow p-3 bg-body rounded">
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
-                                            <input 
-                                                className="form-check-input check-pgto ms-4" type="checkbox" 
-                                                id="checkDinheiro" 
+                                            <input
+                                                className="form-check-input check-pgto ms-4" type="checkbox"
+                                                id="checkDinheiro"
                                                 value="Dinheiro"
                                                 checked={checkDinheiro}
                                                 onChange={() => {
@@ -227,9 +232,9 @@ export default function Attendance() {
                                                 }}
                                                 required={isRequired}
                                             />
-                                                <label htmlFor="checkDinheiro" className="form-check-label ms-4">
-                                                    Dinheiro
-                                                </label>
+                                            <label htmlFor="checkDinheiro" className="form-check-label ms-4">
+                                                Dinheiro
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -237,7 +242,7 @@ export default function Attendance() {
                                 <div className="breadcrumb mb-3 shadow p-3 bg-body rounded">
                                     <div className="breadcrumb-item">
                                         <div className="form-check">
-                                            <Accordion 
+                                            <Accordion
                                                 isCheckedPix={checkPix}
                                                 isCheckedDinheiro={checkDinheiro}
                                                 changeItens={changeItens}
@@ -248,7 +253,7 @@ export default function Attendance() {
                                     </div>
                                 </div>
 
-                                
+
                             </div>
 
                             <div className="row justify-content-center">
