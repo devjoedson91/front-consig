@@ -26,7 +26,7 @@ export default function Accordion({
     const [checkCard, setCheckCard] = useState(false);
     const [cardRequired, setCardRequired] = useState(true);
     const [itemRequired, setItemRequired] = useState(true);
-        
+           
     useEffect(() => {
 
         if (isCheckedPix || isCheckedDinheiro) {
@@ -53,13 +53,23 @@ export default function Accordion({
 
     useEffect(() => {
 
-        if (checkCard) setItemRequired(true);
+        if (checkCard) {
+            
+            setItemRequired(true);
+            
+        }
 
     }, [checkCard]);
 
     useEffect(() => {
 
-        setCheckCard(isCheckedCartao);
+        if (isCheckedCartao) {
+
+            const accordionItemOpened = document.querySelector(`[data-accordion-body="1"]`);
+            accordionItemOpened.classList.add(`${styles.active}`);
+            setCheckCard(isCheckedCartao);
+
+        }
 
     }, [isCheckedCartao])
 

@@ -95,7 +95,7 @@ export default function Home() {
 
             }
 
-        }, 2000);
+        }, 1500);
 
     }, [storageRegister]);
 
@@ -121,7 +121,6 @@ export default function Home() {
 
 
     }, [uf]);
-
 
     async function handleRegister(event: FormEvent<HTMLFormElement>) {
 

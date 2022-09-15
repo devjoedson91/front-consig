@@ -93,14 +93,14 @@ export default function Attendance() {
                     } else if (data.formPgto === 'Pix') {
                         setCheckPix(true);
                     } else if (data.formPgto === 'Cartão de Crédito') {
-                        setCheckedCartao(true);
+                        getCheckedCartao(true);
                     }
 
                 });
 
             }           
 
-        }, 2000);
+        }, 1500);
 
     }, [storageRegister]);
 
