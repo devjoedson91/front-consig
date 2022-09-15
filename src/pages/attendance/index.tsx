@@ -8,6 +8,7 @@ import Router from "next/router";
 import firebase from "../../services/firebaseConnection";
 import styles from './styles.module.scss';
 import { toast } from 'react-toastify';
+import { PropsRegister } from '../../types';
 
 type ProfessionProps = {
     id: number | string;
@@ -25,6 +26,18 @@ export default function Attendance() {
     const [formPgto, setFormPgto] = useState('');
     const [qtdeParcelas, setQtdeParcelas] = useState(undefined);
     const [isRequired, setIsRequired] = useState(true);
+
+    const [storageRegister, setStorageRegister] = useState<PropsRegister[]>(() => {
+
+        const storagedData = typeof window !== 'undefined' ? localStorage.getItem('consig@register') : null;
+
+        if (storagedData) {
+            return JSON.parse(storagedData);
+        }
+
+        return [];
+
+    });
 
     useEffect(() => {
 
@@ -47,8 +60,49 @@ export default function Attendance() {
 
         getEspecialidades();
 
-
     }, []);
+
+    useEffect(() => {
+
+        setTimeout(() => {
+
+            if (storageRegister) {
+
+                storageRegister.map(data => {
+
+                    setValorConsulta(String(data.valorConsulta || ''));
+
+                    const options = document.querySelectorAll('.options-select');
+                    options.forEach(option => {
+
+                        if (option.innerHTML === data.especialidade) {
+
+                            option.setAttribute('selected', 'selected');
+                            let optionValue = option.innerHTML;
+                            setEspecialidade(optionValue);
+
+                        }
+
+                    });
+
+                    if (data.formPgto === 'Pix e Dinheiro') {
+                        setCheckDinheiro(true);
+                        setCheckPix(true);
+                    } else if (data.formPgto === 'Dinheiro') {
+                        setCheckDinheiro(true);
+                    } else if (data.formPgto === 'Pix') {
+                        setCheckPix(true);
+                    } else if (data.formPgto === 'Cartão de Crédito') {
+                        setCheckedCartao(true);
+                    }
+
+                });
+
+            }           
+
+        }, 2000);
+
+    }, [storageRegister]);
 
     useEffect(() => {
 
@@ -164,7 +218,9 @@ export default function Attendance() {
                                     {
                                         listEspecialidades.map(item => {
                                             return (
-                                                <option key={item.id}>{item.nome}</option>
+                                                <option key={item.id} className="options-select">
+                                                    {item.nome}
+                                                </option>
                                             );
                                         })
                                     }
@@ -245,6 +301,7 @@ export default function Attendance() {
                                             <Accordion
                                                 isCheckedPix={checkPix}
                                                 isCheckedDinheiro={checkDinheiro}
+                                                isCheckedCartao={checkedCartao}
                                                 changeItens={changeItens}
                                                 getCheckedCartao={getCheckedCartao}
                                                 getQtdeParcelas={getQtdeParcelas}

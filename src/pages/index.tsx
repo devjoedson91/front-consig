@@ -29,7 +29,7 @@ export default function Home() {
     const [uf, setUf] = useState('');
     const [cpf, setCpf] = useState('');
     const [phone, setPhone] = useState('');
-            
+
     const [storageRegister, setStorageRegister] = useState<PropsRegister[]>(() => {
 
         const storagedData = typeof window !== 'undefined' ? localStorage.getItem('consig@register') : null;
@@ -48,27 +48,27 @@ export default function Home() {
 
             await firebase.database().ref('estados').on('value', (snapshot) => {
                 setListUf(snapshot.val());
-            })        
+            })
 
         }
 
         getUf();
-        
+
+    }, []);
+
+    useEffect(() => {
+
         setTimeout(() => {
 
-            const getStorageData = typeof window !== 'undefined' ? 
-            JSON.parse(localStorage.getItem('consig@register')) : null;
+            if (storageRegister) {
 
-            if (getStorageData) {
-
-                getStorageData.map(data => {
+                storageRegister.map(data => {
 
                     setNome(data.nome);
                     setCpf(data.cpf);
                     setPhone(data.phone);
 
                     const optionsEstado = document.querySelectorAll('.option-select');
-                    console.log(optionsEstado);
                     optionsEstado.forEach(option => {
 
                         if (option.innerHTML === data.estado) {
@@ -76,15 +76,17 @@ export default function Home() {
                             option.setAttribute('selected', 'selected');
                             let optionValue = option.getAttribute('value');
                             setUf(optionValue);
+                            setEstado(option.innerHTML);
 
                         }
 
                     });
 
                     const optionsCity = document.querySelectorAll('.option-city');
-                    optionsCity.forEach(cidade => {
-                        if (cidade.innerHTML === data.city) {
-                            cidade.setAttribute('selected', 'selected');
+                    optionsCity.forEach(option => {
+                        if (option.innerHTML === data.city) {
+                            option.setAttribute('selected', 'selected');
+                            setCity(option.innerHTML);
                         }
                     });
 
@@ -95,7 +97,7 @@ export default function Home() {
 
         }, 2000);
 
-    }, []);
+    }, [storageRegister]);
 
     useEffect(() => {
 
@@ -133,29 +135,56 @@ export default function Home() {
 
         } else {
 
-            const udpateRegister = [...storageRegister];
+            if (storageRegister.length > 0) {
 
-            const newRegister = { 
-                nome, 
-                cpf, 
-                phone, 
-                estado, 
-                city,
-                especialidade: '',
-                valorConsulta: 0,
-                formPgto: '',
-                qtdeParcelas: 0
-            };
+                const updateRegister = [];
 
-            console.log(newRegister);
+                const attendance = storageRegister.map(data => {
 
-            udpateRegister.push(newRegister);
-            setStorageRegister(udpateRegister);
-            localStorage.setItem('consig@register', JSON.stringify(udpateRegister));
+                    return {
+                        especialidade: data.especialidade ?? '',
+                        valorConsulta: data.valorConsulta ?? '',
+                        formPgto: data.formPgto ?? '',
+                        qtdeParcelas: data.qtdeParcelas ?? ''
+                    }
 
-            event.preventDefault();
-            Router.push('/attendance');
+                })
 
+                const data = {
+                    nome,
+                    cpf,
+                    phone,
+                    estado,
+                    city,
+                    ...attendance[0]
+                }
+
+                
+                updateRegister.push(data);
+                localStorage.setItem('consig@register', JSON.stringify(updateRegister));
+
+                event.preventDefault();
+                Router.push('/attendance');
+
+
+            } else {
+
+                const newRegister = [];
+                const data = {
+                    nome,
+                    cpf,
+                    phone,
+                    estado,
+                    city
+                };
+
+                newRegister.push(data);
+                localStorage.setItem('consig@register', JSON.stringify(newRegister));
+
+                event.preventDefault();
+                Router.push('/attendance');
+
+            }
 
         }
 

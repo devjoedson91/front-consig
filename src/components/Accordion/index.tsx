@@ -5,6 +5,7 @@ import styles from './styles.module.scss';
 export type AccordionProps = {
     isCheckedPix: boolean;
     isCheckedDinheiro: boolean;
+    isCheckedCartao: boolean;
     getQtdeParcelas: (qtdeParcelas: number | string) => void;
     getCheckedCartao: (value: boolean) => void;
     changeItens: () => void;
@@ -12,7 +13,8 @@ export type AccordionProps = {
 
 export default function Accordion({
     isCheckedDinheiro, 
-    isCheckedPix, 
+    isCheckedPix,
+    isCheckedCartao,
     getQtdeParcelas, 
     getCheckedCartao,
     changeItens
@@ -54,6 +56,12 @@ export default function Accordion({
         if (checkCard) setItemRequired(true);
 
     }, [checkCard]);
+
+    useEffect(() => {
+
+        setCheckCard(isCheckedCartao);
+
+    }, [isCheckedCartao])
 
 
     function handleAccordion(event) {
