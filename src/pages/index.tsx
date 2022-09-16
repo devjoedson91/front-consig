@@ -6,6 +6,7 @@ import Button from "../components/Button";
 import Router from "next/router";
 import firebase from "../services/firebaseConnection";
 import { PropsRegister } from '../types';
+import { toast } from "react-toastify";
 
 type stateProps = {
 
@@ -29,6 +30,7 @@ export default function Home() {
     const [uf, setUf] = useState('');
     const [cpf, setCpf] = useState('');
     const [phone, setPhone] = useState('');
+    const [listUsers, setListUsers] = useState<PropsRegister[]>([]);
 
     const [storageRegister, setStorageRegister] = useState<PropsRegister[]>(() => {
 
@@ -53,6 +55,26 @@ export default function Home() {
         }
 
         getUf();
+
+        async function getRegister() {
+
+            await firebase.database().ref('dados_usuarios').on('value', (snapshot) => {
+
+                const listRegisters = Object.assign(snapshot.val());
+                const listArray = [];
+
+                for (let [key, value] of Object.entries(listRegisters)) {
+
+                    listArray.push(value);
+                    
+                }
+
+                setListUsers(listArray);
+            })
+
+        }
+
+        getRegister();
 
     }, []);
 
@@ -134,6 +156,19 @@ export default function Home() {
 
         } else {
 
+            if (listUsers.length > 0) {
+
+                const hasCpf = listUsers.some(register => cpf === register.cpf);
+
+                if (hasCpf) {
+
+                    event.preventDefault();
+                    toast.error('CPF já cadastrado!');
+                    return false;
+                }
+
+            } 
+            
             if (storageRegister.length > 0) {
 
                 const updateRegister = [];
@@ -147,7 +182,7 @@ export default function Home() {
                         qtdeParcelas: data.qtdeParcelas ?? ''
                     }
 
-                })
+                });
 
                 const data = {
                     nome,
