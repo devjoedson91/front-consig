@@ -1,7 +1,7 @@
 # Consig Facil
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/devsuperior/sds1-wmazoni/blob/master/LICENSE) 
 
-# Sobre o projeto
+## Sobre o projeto
 
 A aplicação consiste em cadastro de profissionais de saúde.
 
@@ -9,12 +9,26 @@ A aplicação consiste em cadastro de profissionais de saúde.
 
 https://front-consig.herokuapp.com/
 
-# Tecnologias utilizadas
+## Tecnologias Front end
 
-## Front end
 - ReactJS / Next / Typescript / Sass / Bootstrap
 
-# Como executar o projeto
+## Tecnologias Back end
+
+- Firebase
+
+## Habilidades aplicadas no projeto
+
+- Construção de API própria com Firebase
+- RESTFUL
+- HTTP
+- Tratamento de dados com funções assincronas
+- Validações
+- Tratamento de erros
+- Mensagens ao usuário
+- Fluxo de aplicação
+
+## Como executar o projeto
 
 ```bash
 # clonar repositório
